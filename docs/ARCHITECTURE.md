@@ -55,6 +55,13 @@
 
 ## Componentes
 
+> **Nota:** o frontend está sendo publicado na **Vercel** (ver
+> [DEPLOY-VERCEL.md](DEPLOY-VERCEL.md)), que substitui o par S3 + CloudFront
+> descrito abaixo — a Vercel já entrega CDN, TLS e domínio. O código suporta
+> os dois alvos (`BUILD_TARGET=static` gera o export para S3), então este
+> desenho segue válido caso a hospedagem migre para a AWS. O backend em
+> EC2/VPC e o DynamoDB permanecem inalterados nos dois cenários.
+
 ### Frontend (S3 + CloudFront + Route 53)
 - Build estático do Next.js (`next build` com `output: "export"`) publicado em um bucket S3 privado.
 - Bucket acessível apenas via **Origin Access Control (OAC)** do CloudFront — nunca público diretamente.

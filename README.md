@@ -94,7 +94,21 @@ mudam. Para voltar aos dados originais: **Perfil → Restaurar dados originais**
 Login de demonstração: qualquer CPF válido (11 dígitos) e senha com 8+
 caracteres.
 
+## Deploy
+
+O frontend suporta dois alvos a partir do mesmo código:
+
+```bash
+npm run build                      # Vercel (padrão) — Next.js nativo + headers de segurança
+BUILD_TARGET=static npm run build  # S3 + CloudFront — export estático em out/
+```
+
+Para publicar na Vercel, o **Root Directory precisa ser `frontend`** (é um
+monorepo, sem `package.json` na raiz) — passo a passo em
+[docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md).
+
 ## Documentação
 
+- [docs/DEPLOY-VERCEL.md](docs/DEPLOY-VERCEL.md) — publicação do frontend na Vercel e variáveis de ambiente.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — arquitetura de hospedagem AWS (S3 + CloudFront, Route 53, EC2 em VPC privada, DynamoDB).
 - [docs/SECURITY.md](docs/SECURITY.md) — criptografia (E2EE de campo + KMS), ofuscação de logs, JWT de curta duração, proteção XSS/CSRF, rate limiting.

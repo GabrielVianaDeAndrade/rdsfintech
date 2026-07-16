@@ -4,15 +4,12 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Lock } from "lucide-react";
 import { HeroPhone } from "./HeroPhone";
+import { AmbientLights } from "./AmbientLights";
 
 export function Hero() {
   return (
     <section className="relative overflow-hidden">
-      {/* Fundo: gradiente radial discreto + linha de base */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_50%_-10%,rgba(0,200,150,0.08),transparent_70%)]"
-      />
+      <AmbientLights />
 
       <div className="section grid items-center gap-12 pb-16 pt-12 sm:pb-20 sm:pt-16 lg:grid-cols-[1fr_auto] lg:gap-16 lg:pb-28 lg:pt-24">
         <motion.div

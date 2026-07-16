@@ -19,10 +19,15 @@ export function HeroPhone() {
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       className="relative flex justify-center"
     >
-      {/* Halo discreto atrás do aparelho */}
+      {/* Halo duplo atrás do aparelho: esmeralda por baixo, azul deslocado —
+          a sobreposição cria a borda de luz nas laterais do celular. */}
       <div
         aria-hidden
-        className="absolute left-1/2 top-1/2 -z-10 h-[85%] w-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald/[0.07] blur-[80px]"
+        className="absolute left-1/2 top-1/2 -z-10 h-[80%] w-[80%] -translate-x-[58%] -translate-y-1/2 rounded-full bg-emerald/25 blur-[70px]"
+      />
+      <div
+        aria-hidden
+        className="absolute left-1/2 top-1/2 -z-10 h-[75%] w-[75%] -translate-x-[38%] -translate-y-[45%] rounded-full bg-azure/25 blur-[70px]"
       />
 
       <motion.div
@@ -30,8 +35,8 @@ export function HeroPhone() {
         transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
         className="relative w-[248px] shrink-0 sm:w-[272px] lg:w-[292px]"
       >
-        {/* Moldura do aparelho */}
-        <div className="relative aspect-[9/19.5] w-full rounded-[2.6rem] bg-gradient-to-b from-[#2a2f34] to-[#141719] p-[3px] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.9)]">
+        {/* Moldura do aparelho — o ring translúcido pega a luz dos halos */}
+        <div className="relative aspect-[9/19.5] w-full rounded-[2.6rem] bg-gradient-to-b from-[#2a2f34] to-[#141719] p-[3px] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.9),0_0_50px_-12px_rgba(0,200,150,0.35)] ring-1 ring-white/10">
           {/* Botões laterais */}
           <span aria-hidden className="absolute -left-[2px] top-[19%] h-9 w-[2px] rounded-l bg-[#3a4045]" />
           <span aria-hidden className="absolute -left-[2px] top-[27%] h-14 w-[2px] rounded-l bg-[#3a4045]" />

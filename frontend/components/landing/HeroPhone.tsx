@@ -1,120 +1,204 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowDownLeft, ArrowUpRight, Search, Bell } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowDownLeft, ArrowUpRight, Barcode, QrCode, Plus, CreditCard } from "lucide-react";
 
 /**
- * Mockup de iPhone flutuante com leve rotação/translação contínua (Framer Motion),
- * exibindo um recorte da interface da conta digital RDS Fintech.
+ * Mockup de iPhone COMPLETO — moldura inteira sempre visível, sem corte pela
+ * viewport. A proporção segue a de um iPhone real (~19.5:9) e escala por
+ * breakpoint. A flutuação é sutil (translação vertical de poucos pixels) e
+ * respeita `prefers-reduced-motion`.
  */
 export function HeroPhone() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40, rotate: -6 }}
-      animate={{
-        opacity: 1,
-        y: [0, -18, 0],
-        rotate: [-6, -3, -6],
-      }}
-      transition={{
-        opacity: { duration: 0.8 },
-        y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
-        rotate: { duration: 6, repeat: Infinity, ease: "easeInOut" },
-      }}
-      className="relative mx-auto w-[300px] select-none sm:w-[340px]"
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      className="relative flex justify-center"
     >
-      {/* Glow de fundo */}
-      <div className="absolute inset-0 -z-10 scale-110 rounded-[3rem] bg-emerald/20 blur-3xl" />
+      {/* Halo discreto atrás do aparelho */}
+      <div
+        aria-hidden
+        className="absolute left-1/2 top-1/2 -z-10 h-[85%] w-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald/[0.07] blur-[80px]"
+      />
 
-      {/* Corpo do iPhone */}
-      <div className="relative rounded-[3rem] border-[6px] border-[#1c1f22] bg-black p-2 shadow-2xl">
-        <div className="absolute left-1/2 top-2 z-10 h-6 w-28 -translate-x-1/2 rounded-full bg-black" />
-        <div className="overflow-hidden rounded-[2.3rem] bg-background-surface">
-          {/* Status bar */}
-          <div className="flex items-center justify-between px-6 pb-1 pt-4 text-[11px] text-white">
-            <span>9:41</span>
-            <div className="flex items-center gap-1">
-              <Search size={12} />
-              <Bell size={12} />
-            </div>
-          </div>
+      <motion.div
+        animate={reduceMotion ? undefined : { y: [0, -10, 0] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+        className="relative w-[248px] shrink-0 sm:w-[272px] lg:w-[292px]"
+      >
+        {/* Moldura do aparelho */}
+        <div className="relative aspect-[9/19.5] w-full rounded-[2.6rem] bg-gradient-to-b from-[#2a2f34] to-[#141719] p-[3px] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.9)]">
+          {/* Botões laterais */}
+          <span aria-hidden className="absolute -left-[2px] top-[19%] h-9 w-[2px] rounded-l bg-[#3a4045]" />
+          <span aria-hidden className="absolute -left-[2px] top-[27%] h-14 w-[2px] rounded-l bg-[#3a4045]" />
+          <span aria-hidden className="absolute -right-[2px] top-[24%] h-16 w-[2px] rounded-r bg-[#3a4045]" />
 
-          {/* Card de saldo */}
-          <div className="mx-4 mt-3 rounded-2xl bg-gradient-to-br from-background-elevated to-black p-4">
-            <p className="text-xs text-muted">Saldo em conta</p>
-            <p className="mt-1 text-2xl font-semibold text-white">
-              R$ 7.580,20
-            </p>
-            <div className="mt-4 flex gap-2">
-              <span className="rounded-pill bg-emerald px-3 py-1.5 text-[11px] font-semibold text-background">
-                Adicionar
-              </span>
-              <span className="rounded-pill border border-line px-3 py-1.5 text-[11px] text-white">
-                Detalhes
-              </span>
-            </div>
-          </div>
-
-          {/* Banner */}
-          <div className="mx-4 mt-3 flex items-center gap-3 rounded-2xl bg-azure-dim p-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-azure/20">
-              <ArrowUpRight size={14} className="text-azure-soft" />
-            </div>
-            <div className="text-[11px] leading-tight text-white/90">
-              Sua conta está mais segura.
-              <br />
-              <span className="text-muted">Confira as novidades</span>
-            </div>
-          </div>
-
-          {/* Atividade recente */}
-          <div className="mx-4 mb-5 mt-3 rounded-2xl border border-line p-3">
-            <p className="mb-2 text-[11px] font-medium text-muted">
-              Atividade recente
-            </p>
-            <ActivityRow
-              label="Pix recebido"
-              value="+R$ 253,10"
-              positive
+          <div className="relative h-full w-full overflow-hidden rounded-[2.45rem] bg-[#08090a]">
+            {/* Dynamic island */}
+            <div
+              aria-hidden
+              className="absolute left-1/2 top-[9px] z-20 h-[22px] w-[76px] -translate-x-1/2 rounded-full bg-black"
             />
-            <ActivityRow label="Apple Pay" value="-R$ 27,89" />
+
+            <div className="flex h-full flex-col">
+              {/* Status bar */}
+              <div className="flex items-center justify-between px-5 pb-1 pt-3 text-[10px] font-medium text-white">
+                <span>9:41</span>
+                <div className="flex items-center gap-[3px]">
+                  <SignalIcon />
+                  <BatteryIcon />
+                </div>
+              </div>
+
+              {/* Conteúdo da tela */}
+              <div className="flex-1 overflow-hidden px-3 pt-2">
+                <div className="mb-2.5 flex items-center justify-between px-1">
+                  <div>
+                    <p className="text-[9px] text-white/40">Boa tarde,</p>
+                    <p className="text-[11px] font-semibold text-white">Maria</p>
+                  </div>
+                  <div className="h-6 w-6 rounded-full bg-gradient-to-br from-emerald/70 to-azure/70" />
+                </div>
+
+                {/* Saldo */}
+                <div className="rounded-2xl border border-white/[0.07] bg-white/[0.03] p-3">
+                  <p className="text-[9px] text-white/40">Saldo disponível</p>
+                  <p className="mt-0.5 text-[19px] font-semibold tracking-tight text-white">
+                    R$ 7.580,20
+                  </p>
+                  <div className="mt-2.5 flex gap-1.5">
+                    <span className="flex items-center gap-1 rounded-lg bg-emerald px-2 py-1 text-[8px] font-semibold text-background">
+                      <Plus size={8} strokeWidth={3} /> Adicionar
+                    </span>
+                    <span className="rounded-lg border border-white/10 px-2 py-1 text-[8px] text-white/80">
+                      Transferir
+                    </span>
+                  </div>
+                </div>
+
+                {/* Atalhos */}
+                <div className="mt-2.5 grid grid-cols-4 gap-1.5">
+                  {[
+                    { Icon: QrCode, label: "Pix" },
+                    { Icon: Barcode, label: "Boleto" },
+                    { Icon: CreditCard, label: "Cartão" },
+                    { Icon: ArrowUpRight, label: "Enviar" },
+                  ].map(({ Icon, label }) => (
+                    <div
+                      key={label}
+                      className="flex flex-col items-center gap-1 rounded-xl border border-white/[0.06] py-2"
+                    >
+                      <Icon size={11} className="text-white/70" strokeWidth={1.75} />
+                      <span className="text-[7px] text-white/50">{label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Atividade */}
+                <div className="mt-2.5 rounded-2xl border border-white/[0.06] p-2.5">
+                  <p className="mb-1.5 text-[8px] font-medium text-white/40">
+                    Atividade recente
+                  </p>
+                  <PhoneRow label="Pix recebido" sub="João P." value="+R$ 253,10" positive />
+                  <PhoneRow label="Apple Pay" sub="Hoje" value="-R$ 27,89" />
+                  <PhoneRow label="Enel Energia" sub="Boleto" value="-R$ 184,32" />
+                </div>
+              </div>
+
+              {/* Tab bar */}
+              <div className="mt-auto flex items-center justify-around border-t border-white/[0.06] px-3 pb-3 pt-2">
+                {["Início", "Pix", "Cartão", "Perfil"].map((t, i) => (
+                  <span
+                    key={t}
+                    className={
+                      i === 0
+                        ? "text-[7px] font-medium text-emerald"
+                        : "text-[7px] text-white/30"
+                    }
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              {/* Home indicator */}
+              <div aria-hidden className="mx-auto mb-1.5 h-[3px] w-24 rounded-full bg-white/25" />
+            </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
 
-function ActivityRow({
+function PhoneRow({
   label,
+  sub,
   value,
   positive,
 }: {
   label: string;
+  sub: string;
   value: string;
   positive?: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between py-1.5">
-      <div className="flex items-center gap-2">
-        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-background-elevated">
+    <div className="flex items-center justify-between py-[5px]">
+      <div className="flex items-center gap-1.5">
+        <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white/[0.06]">
           {positive ? (
-            <ArrowDownLeft size={11} className="text-emerald-soft" />
+            <ArrowDownLeft size={8} className="text-emerald" strokeWidth={2.5} />
           ) : (
-            <ArrowUpRight size={11} className="text-muted" />
+            <ArrowUpRight size={8} className="text-white/40" strokeWidth={2.5} />
           )}
         </div>
-        <span className="text-[11px] text-white/80">{label}</span>
+        <div>
+          <p className="text-[8px] leading-tight text-white/80">{label}</p>
+          <p className="text-[7px] leading-tight text-white/35">{sub}</p>
+        </div>
       </div>
       <span
         className={
           positive
-            ? "text-[11px] font-medium text-emerald-soft"
-            : "text-[11px] font-medium text-white/70"
+            ? "text-[8px] font-semibold text-emerald"
+            : "text-[8px] font-medium text-white/60"
         }
       >
         {value}
       </span>
     </div>
+  );
+}
+
+function SignalIcon() {
+  return (
+    <svg width="12" height="8" viewBox="0 0 16 11" fill="none" aria-hidden>
+      {[0, 1, 2, 3].map((i) => (
+        <rect
+          key={i}
+          x={i * 4}
+          y={8 - i * 2.4}
+          width="2.5"
+          height={3 + i * 2.4}
+          rx="0.7"
+          fill="white"
+          opacity={i === 3 ? 0.4 : 1}
+        />
+      ))}
+    </svg>
+  );
+}
+
+function BatteryIcon() {
+  return (
+    <svg width="16" height="8" viewBox="0 0 22 11" fill="none" aria-hidden>
+      <rect x="0.5" y="0.5" width="18" height="10" rx="2.5" stroke="white" strokeOpacity="0.4" />
+      <rect x="2" y="2" width="13" height="7" rx="1.5" fill="white" />
+      <path d="M20.5 4v3a2 2 0 0 0 0-3Z" fill="white" fillOpacity="0.4" />
+    </svg>
   );
 }

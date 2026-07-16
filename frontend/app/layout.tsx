@@ -1,24 +1,30 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { AppProvider } from "@/lib/store";
+import { ToastProvider } from "@/components/ui/Toast";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "RDS Fintech | Banco digital com segurança de ponta a ponta",
+  title: "RDS Fintech | Controle total das suas finanças",
   description:
-    "RDS Fintech — conta digital, PIX, boleto e empréstimo com simulação transparente. Segurança e confidencialidade em primeiro lugar.",
+    "Conta digital, Pix, boletos e crédito em uma única plataforma. Transparência em cada taxa e criptografia em cada transação.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export const viewport: Viewport = {
+  themeColor: "#050607",
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={inter.variable}>
-      <body className="min-h-screen bg-background font-sans antialiased">
-        {children}
+      <body className="min-h-screen bg-background font-sans">
+        <AppProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </AppProvider>
       </body>
     </html>
   );

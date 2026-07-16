@@ -1,81 +1,81 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 
-const NAV_ITEMS = ["Home", "Feature", "Product", "Resources", "Community"];
+const NAV_ITEMS = [
+  { label: "Conta", href: "#produtos" },
+  { label: "Crédito", href: "/simulacao" },
+  { label: "Segurança", href: "#seguranca" },
+];
 
-export function Header({ onOpenSignup }: { onOpenSignup: () => void }) {
-  const [mobileOpen, setMobileOpen] = useState(false);
+export function Header() {
+  const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line/60 bg-background/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-line/70 bg-background/85 backdrop-blur-md">
       <div className="section flex h-16 items-center justify-between">
-        <div className="flex items-center gap-2">
-          <LogoMark />
-          <span className="text-lg font-semibold tracking-tight text-white">
-            RDS Fintech
-          </span>
-        </div>
+        <Link href="/" className="flex items-center gap-2.5" aria-label="RDS Fintech — início">
+          <Logo />
+        </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
           {NAV_ITEMS.map((item) => (
-            <a
-              key={item}
-              href="#"
+            <Link
+              key={item.label}
+              href={item.href}
               className="text-sm text-muted transition-colors hover:text-white"
             >
-              {item}
-            </a>
+              {item.label}
+            </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
-          <button className="rounded-pill px-4 py-2 text-sm font-medium text-white hover:text-emerald-soft">
-            Sign in
-          </button>
-          <button onClick={onOpenSignup} className="btn-primary !py-2">
-            Sign up
-          </button>
+        <div className="hidden items-center gap-2 md:flex">
+          <Link href="/login" className="btn-ghost">
+            Entrar
+          </Link>
+          <Link href="/cadastro" className="btn-primary !px-5 !py-2">
+            Abrir conta
+          </Link>
         </div>
 
         <button
-          className="text-white md:hidden"
-          onClick={() => setMobileOpen((v) => !v)}
-          aria-label="Abrir menu"
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-white md:hidden"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={open}
         >
-          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          {open ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
-      {mobileOpen && (
-        <div className="border-t border-line/60 px-6 pb-6 md:hidden">
-          <nav className="flex flex-col gap-4 pt-4">
+      {open && (
+        <div className="border-t border-line/70 bg-background md:hidden">
+          <nav className="section flex flex-col gap-1 py-4">
             {NAV_ITEMS.map((item) => (
-              <a key={item} href="#" className="text-sm text-muted">
-                {item}
-              </a>
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="rounded-lg px-2 py-2.5 text-sm text-muted hover:bg-white/5 hover:text-white"
+              >
+                {item.label}
+              </Link>
             ))}
-            <button onClick={onOpenSignup} className="btn-primary mt-2">
-              Sign up
-            </button>
+            <div className="mt-3 flex flex-col gap-2">
+              <Link href="/login" onClick={() => setOpen(false)} className="btn-secondary">
+                Entrar
+              </Link>
+              <Link href="/cadastro" onClick={() => setOpen(false)} className="btn-primary">
+                Abrir conta
+              </Link>
+            </div>
           </nav>
         </div>
       )}
     </header>
-  );
-}
-
-function LogoMark() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <circle cx="14" cy="14" r="13" stroke="white" strokeWidth="2" />
-      <path
-        d="M14 7c-3.5 0-6 2.5-6 6s2.5 6 6 6"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
   );
 }

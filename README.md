@@ -10,30 +10,31 @@ provedor de Banking as a Service (BaaS).
 rdsfintech/
 ├── frontend/                      # Next.js 14 (App Router) + Tailwind + Framer Motion
 │   ├── app/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx                # Landing Page
-│   │   └── dashboard/page.tsx      # Dashboard pós-login (estilo Nubank)
+│   │   ├── layout.tsx               # Providers (estado + toasts)
+│   │   ├── page.tsx                 # Landing Page
+│   │   ├── login/page.tsx           # Login (página dedicada, não modal)
+│   │   ├── cadastro/page.tsx        # Abertura de conta / KYC em 2 etapas
+│   │   ├── simulacao/page.tsx       # Simulação pública de empréstimo
+│   │   └── dashboard/               # Área logada — uma página por módulo
+│   │       ├── page.tsx             # Início (saldo, atalhos, atividade)
+│   │       ├── pix/page.tsx         # Enviar, receber e chaves
+│   │       ├── boleto/page.tsx      # Pagar, emitir e histórico
+│   │       ├── cartao/page.tsx      # Cartões físico/virtual, bloqueio, limite
+│   │       ├── emprestimo/page.tsx  # Simular e contratar (prazo livre)
+│   │       ├── perfil/page.tsx      # Dados pessoais e segurança
+│   │       ├── notificacoes/page.tsx
+│   │       ├── depositar/page.tsx
+│   │       └── extrato/page.tsx
 │   ├── components/
-│   │   ├── landing/                # Header, Hero (iPhone animado), simulador de
-│   │   │   │                       # empréstimo, formulário KYC, modal de cadastro
-│   │   │   ├── Header.tsx
-│   │   │   ├── Hero.tsx
-│   │   │   ├── HeroPhone.tsx
-│   │   │   ├── LoanSimulator.tsx
-│   │   │   ├── KycForm.tsx
-│   │   │   ├── SignupModal.tsx
-│   │   │   ├── ValueProps.tsx
-│   │   │   └── Footer.tsx
-│   │   ├── dashboard/               # Cards independentes: saldo, Pix, boleto, empréstimo
-│   │   │   ├── Sidebar.tsx
-│   │   │   ├── BalanceCard.tsx
-│   │   │   ├── QuickActions.tsx
-│   │   │   ├── ActivityList.tsx
-│   │   │   ├── PixModule.tsx
-│   │   │   ├── BoletoModule.tsx
-│   │   │   └── LoanModule.tsx
-│   │   └── ui/                      # Componentes reutilizáveis (Sheet/bottom-sheet)
-│   └── lib/                         # utils, types, simulação de empréstimo
+│   │   ├── landing/                 # Header, Hero (iPhone completo animado),
+│   │   │                            # Products, Security, CTA, Footer
+│   │   ├── dashboard/               # DashboardShell (nav + sininho), TransactionList
+│   │   ├── shared/                  # LoanCalculator (prazo livre de 1 a 60 meses)
+│   │   └── ui/                      # BackButton, Field, Toast, Logo, AuthShell
+│   └── lib/
+│       ├── store.tsx                # Estado da conta (dados fictícios + localStorage)
+│       ├── types.ts
+│       └── utils.ts                 # Máscaras, formatação e cálculo Price/CET
 │
 ├── backend/                        # Node.js + Express + TypeScript (BFF)
 │   └── src/
@@ -76,6 +77,22 @@ memória). Para produção, defina `NODE_ENV=production` e as credenciais do
 provedor BaaS real em `.env` — a troca de implementação é feita em
 [`backend/src/services/baas/baas.factory.ts`](backend/src/services/baas/baas.factory.ts)
 sem alterar nenhum controller ou rota.
+
+## Estado da demonstração (dados fictícios)
+
+Enquanto a API do BaaS não está integrada, o painel é **totalmente navegável**
+com dados fictícios: enviar Pix debita o saldo, emitir boleto gera linha
+digitável, bloquear cartão altera o cartão, contratar empréstimo credita a
+conta e dispara notificação.
+
+Esse estado vive em [`frontend/lib/store.tsx`](frontend/lib/store.tsx) e é
+salvo no `localStorage` do navegador, sobrevivendo a recarregamentos. Cada
+ação do store tem um endpoint equivalente já mapeado no backend — quando a API
+entrar, o corpo das funções vira uma chamada `fetch` e os componentes não
+mudam. Para voltar aos dados originais: **Perfil → Restaurar dados originais**.
+
+Login de demonstração: qualquer CPF válido (11 dígitos) e senha com 8+
+caracteres.
 
 ## Documentação
 

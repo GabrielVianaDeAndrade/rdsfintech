@@ -6,31 +6,100 @@
   color-scheme: dark;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 html,
 body {
   background-color: #050607;
   color: #f5f6f7;
+  overflow-x: hidden;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #1f2327 transparent;
+  scrollbar-color: #23282d transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #23282d;
+  border-radius: 8px;
+}
+
+/* Range input consistente entre navegadores */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  background: #23282d;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #00c896;
+  cursor: pointer;
+  border: 3px solid #050607;
+  box-shadow: 0 0 0 1px #00c896;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #00c896;
+  cursor: pointer;
+  border: 3px solid #050607;
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-pill bg-emerald px-6 py-3 text-sm font-semibold text-background transition-transform duration-200 hover:scale-[1.03] hover:shadow-glow active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 rounded-pill bg-emerald px-6 py-3 text-sm font-semibold text-background transition-colors duration-150 hover:bg-emerald-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald disabled:cursor-not-allowed disabled:opacity-40;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-pill border border-line bg-transparent px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:border-azure hover:text-azure-soft;
+    @apply inline-flex items-center justify-center gap-2 rounded-pill border border-line bg-transparent px-6 py-3 text-sm font-semibold text-white transition-colors duration-150 hover:border-white/25 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill px-4 py-2 text-sm font-medium text-muted transition-colors hover:bg-white/5 hover:text-white;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill border border-red-500/30 bg-red-500/10 px-6 py-3 text-sm font-semibold text-red-300 transition-colors hover:bg-red-500/20;
   }
 
   .card {
-    @apply rounded-card border border-line bg-background-surface p-5 shadow-card;
+    @apply rounded-card border border-line bg-background-surface p-5;
   }
 
   .section {
-    @apply mx-auto w-full max-w-6xl px-6;
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8;
+  }
+
+  /* Tratamento de ícone contido: traço fino sobre superfície neutra,
+     em vez de tiles saturados. Lê como produto financeiro, não como enfeite. */
+  .icon-tile {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line bg-background text-white/70;
+  }
+
+  .label-xs {
+    @apply text-xs font-medium uppercase tracking-wider text-muted;
   }
 }

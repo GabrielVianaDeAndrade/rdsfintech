@@ -1,0 +1,13 @@
+# Normaliza quebras de linha: LF no repositório, independente do SO do dev.
+# Evita churn de diffs entre Windows (dev) e Linux (EC2/CI).
+* text=auto eol=lf
+
+# Arquivos binários — nunca normalizar
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary

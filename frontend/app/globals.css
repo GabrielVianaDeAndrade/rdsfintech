@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background-color: #050607;
+  color: #f5f6f7;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1f2327 transparent;
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill bg-emerald px-6 py-3 text-sm font-semibold text-background transition-transform duration-200 hover:scale-[1.03] hover:shadow-glow active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill border border-line bg-transparent px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:border-azure hover:text-azure-soft;
+  }
+
+  .card {
+    @apply rounded-card border border-line bg-background-surface p-5 shadow-card;
+  }
+
+  .section {
+    @apply mx-auto w-full max-w-6xl px-6;
+  }
+}

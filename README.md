@@ -64,6 +64,13 @@ npm install
 npm run dev        # http://localhost:3000
 ```
 
+> ⚠️ **Não rode `npm run build` com o `npm run dev` ligado.** Os dois escrevem
+> no mesmo diretório `.next`: a build sobrescreve os chunks que o dev server
+> está usando e ele passa a servir erro 500 com página em branco
+> (`Cannot find module './938.js'`). Parece bug no código, mas é só cache.
+>
+> Se acontecer: pare o dev server, `rm -rf .next` e suba de novo.
+
 ### Backend
 ```bash
 cd backend

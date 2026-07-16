@@ -1,34 +1,67 @@
 # Deploy do frontend na Vercel
 
-## ⚠️ Passo obrigatório: Root Directory
-
 Este repositório é um **monorepo** — não existe `package.json` na raiz, apenas
-em `frontend/` e `backend/`. Se você importar o projeto e clicar em Deploy
-direto, **a build falha** com "Couldn't find any `pages` or `app` directory"
-ou "No Next.js version detected", porque a Vercel procura o projeto na raiz.
+em `frontend/` e `backend/`. A Vercel precisa saber onde está a aplicação.
 
-Na tela de importação (ou depois, em **Settings → General**):
+O [`vercel.json`](../vercel.json) na raiz resolve isso com o modelo de
+[**services**](https://vercel.com/docs/services):
 
-> **Root Directory** → `frontend`
+```json
+{
+  "services": {
+    "frontend": { "root": "frontend", "framework": "nextjs" }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": { "service": "frontend" } }
+  ]
+}
+```
 
-Com isso a Vercel detecta o Next.js sozinha e o resto funciona no padrão —
-nenhum `vercel.json` é necessário.
+## ⚠️ O `rewrites` não é opcional
+
+Um service é **interno por padrão** e não recebe tráfego da internet. É o
+rewrite de catch-all que expõe o frontend publicamente. Sem ele, o deploy
+sobe normalmente mas o site **não responde nada** — um erro silencioso e
+difícil de diagnosticar.
+
+> **Requisito:** o modelo `services` exige a permissão *Services* habilitada
+> na conta/time da Vercel. Se o deploy falhar reclamando da chave `services`,
+> use a alternativa sem `vercel.json`: apague o arquivo e configure
+> **Settings → General → Root Directory** → `frontend`. As duas abordagens são
+> equivalentes para o caso de um único frontend.
 
 ## Passo a passo
 
 1. **New Project** → importe `GabrielVianaDeAndrade/rdsfintech`.
-2. **Root Directory**: mude de `./` para **`frontend`** (passo acima).
-3. **Framework Preset**: deve aparecer `Next.js` automaticamente. Se aparecer
-   "Other", o Root Directory não foi aplicado — volte ao passo 2.
-4. **Environment Variables** (opcional agora, obrigatório quando o BFF subir):
+2. A Vercel lê o `vercel.json` da raiz e monta o service `frontend`.
+3. **Environment Variables** (opcional agora, obrigatório quando o BFF subir):
 
    | Nome | Valor | Para quê |
    |---|---|---|
    | `NEXT_PUBLIC_API_URL` | `https://api.rdsfintech.com.br` | URL do BFF. Entra no `connect-src` da CSP — **sem ela, o browser bloqueia as chamadas à API** |
 
-5. **Deploy**.
+4. **Deploy**.
 
 Build Command, Output Directory e Install Command ficam no padrão da Vercel.
+
+## Por que o backend não está no `vercel.json`
+
+O modelo de `services` permitiria subir o BFF junto (`/api/*` → backend), mas
+ele foi **deliberadamente deixado de fora**:
+
+- A [arquitetura](ARCHITECTURE.md) coloca o BFF em EC2 dentro de uma **VPC
+  privada, sem exposição direta à internet**. Publicá-lo na Vercel o tornaria
+  um endpoint público, invertendo essa decisão de segurança.
+- O [`env.ts`](../backend/src/config/env.ts) tem *fallbacks* de
+  desenvolvimento (`"dev-only-access-secret"`) visíveis neste repositório
+  público. Um deploy sem todas as variáveis configuradas assinaria JWT com um
+  segredo que qualquer pessoa lê no GitHub — permitindo forjar tokens de
+  qualquer usuário.
+
+Se um dia fizer sentido publicar o backend na Vercel, os pré-requisitos são:
+definir **todos** os segredos como Environment Variables antes do primeiro
+deploy, adaptar o `server.ts` (hoje ele faz `app.listen()`, modelo de servidor
+contínuo) e revisar o desenho de rede em `ARCHITECTURE.md`.
 
 ## O que já está configurado no código
 
